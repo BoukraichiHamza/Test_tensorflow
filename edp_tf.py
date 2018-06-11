@@ -4,13 +4,10 @@ import gen_data
 
 if __name__ == '__main__':
     #Variable global
-    n  = 1000 #Nombres de paquets de données générées
-    m  = 10  #Nombres de données générées par paquet
-    maux = 5 # m/2
-    r1 = 20  #Nombres de noeuds en sortie du premier layer
-    r2 = 10  #Nombres de noeuds en sortie du second layer
+    n  = 100000 #Nombres de paquets de données générées
+    m  = 20 #Nombres de neurones dans le hidden layer
 	#Recuperation des donnees
-    train_data,train_target, test_data, test_target = gen_data.generate_data(maux,n)
+    train_data,train_target, test_data, test_target = gen_data.generate_data(n)
 
 
     """
@@ -18,42 +15,29 @@ if __name__ == '__main__':
     """
 
 	# Entree
-    tf_data = tf.placeholder(tf.float32,shape=[None,m])
+    tf_data = tf.placeholder(tf.float32,shape=[None,1])
     tf_cible = tf.placeholder(tf.float32,shape=[None,1])
 
     #Variables graphes (poids et biais)
     """
     	1er layer
     """
-    w1 = tf.Variable(tf.random_normal([m,r1]))
-    b1 = tf.Variable(tf.zeros([r1]))
+    w1 = tf.Variable(tf.random_normal([1,m]))
+    b1 = tf.Variable(tf.zeros([m]))
 
 	#Propagation des donnees
     z1 = tf.matmul(tf_data,w1)+b1
 
     #fonction d'activation du 1er Layer
     py1 = tf.nn.sigmoid(z1)
-
-    """
-    	2ieme layer
-    """
-    w2 = tf.Variable(tf.random_normal([r1,r2]))
-    b2 = tf.Variable(tf.zeros([r2]))
-
-	#Propagation des donnees
-    z2 = tf.matmul(py1,w2)+b2
-
-    #fonction d'activation du 1er Layer
-    py2 = tf.nn.sigmoid(z2)
-
     """
     Neurone de sortie
     """
-    w = tf.Variable(tf.random_normal([r2,1]))
+    w = tf.Variable(tf.random_normal([m,1]))
     b = tf.Variable(tf.zeros([1]))
 
     #Propagation des donnees
-    z = tf.matmul(py2,w)+b
+    z = tf.matmul(py1,w)+b
 
     #fonction d'activation du neuronne de sortie
     py = tf.nn.sigmoid(z)
@@ -69,7 +53,7 @@ if __name__ == '__main__':
     accuracy = tf.reduce_mean(tf.cast(pred_juste,tf.float32))
 
     #Entrainement
-    opt = tf.train.GradientDescentOptimizer(learning_rate=0.1)
+    opt = tf.train.GradientDescentOptimizer(learning_rate=0.91)
     train = opt.minimize(cost)
 
     #Creation de la session
@@ -87,7 +71,7 @@ if __name__ == '__main__':
         })
         #Calcul precision
         acc = sess.run(accuracy,feed_dict={
-        tf_data : train_data,
-        tf_cible: train_target
+        tf_data : test_data,
+        tf_cible: test_target
         })
-        print("epoch[",e,"]  ","accuracy = ",acc)
+        print("epoch[",e,"]  ","accuracy = ",acc*100)

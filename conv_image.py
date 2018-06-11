@@ -16,7 +16,7 @@ files = glob.glob("train/*.jpg")
 # Structuration des données
 targets = []
 features = []
-for file in files:
+for file in files[:]:
     features.append(np.array(Image.open(file).resize((75,75))))
     # Label : 0 pour chat, 1 pour chien
     if  "cat" in file:

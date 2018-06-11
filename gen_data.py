@@ -1,24 +1,19 @@
 import numpy as np
 
-def generate_data(m,n):
+def generate_data(n,LAMBDA=1):
     train_data   = []
     train_target = []
     test_data    = []
     test_target  = []
+    interval     = []
+
     for i in range(1,n+1):
-        new_data1 = []
-        new_data2 = []
-        lambda1   = np.random.randn()
-        lambda2   = np.random.randn()
-
-        for j in range(-m,m):
-            new_data1.append(np.exp(-lambda1*j/m))
-            new_data2.append(np.exp(-lambda2*j/m))
-
-        train_data.append(new_data1)
-        test_data.append(new_data2)
-        train_target.append([lambda1])
-        test_target.append([lambda2])
+        j1 = np.random.randn()
+        j2 = np.random.randn()
+        train_data.append([np.exp(LAMBDA*j1)])
+        test_data.append([np.exp(LAMBDA*j2)])
+        train_target.append([j1])
+        test_target.append([j2])
 
     return train_data,train_target,test_data,test_target
 
