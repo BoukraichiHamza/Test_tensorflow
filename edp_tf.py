@@ -4,7 +4,7 @@ import gen_data
 
 if __name__ == '__main__':
     #Variable global
-    n  = 100000 #Nombres de paquets de données générées
+    n  = 1000000 #Nombres de paquets de données générées
     m  = 20 #Nombres de neurones dans le hidden layer
 	#Recuperation des donnees
     train_data,train_target, test_data, test_target = gen_data.generate_data(n)
@@ -45,15 +45,15 @@ if __name__ == '__main__':
     Fonction du graphe
     """
     #Fonction de cout
-    cost = tf.reduce_mean(tf.square(py-tf_cible))
+    cost = tf.reduce_mean(tf.square(py-tf_cible)+tf.square(tf.exp(tf_cible)-py))
 
     #Etude de precision
     #pred_juste = tf.equal(py,tf_cible)
-    pred_juste = tf.less_equal(tf.abs(py-tf_cible),1e-1)
+    pred_juste = tf.less_equal(tf.abs(py-tf_cible),1e-2)
     accuracy = tf.reduce_mean(tf.cast(pred_juste,tf.float32))
 
     #Entrainement
-    opt = tf.train.GradientDescentOptimizer(learning_rate=0.91)
+    opt = tf.train.GradientDescentOptimizer(learning_rate=1)
     train = opt.minimize(cost)
 
     #Creation de la session

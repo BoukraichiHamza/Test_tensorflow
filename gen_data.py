@@ -1,6 +1,10 @@
 import numpy as np
 
-def generate_data(n,LAMBDA=1):
+"""
+    Global Variables
+"""
+LAMBDA = 1
+def generate_data(n):
     train_data   = []
     train_target = []
     test_data    = []
@@ -17,12 +21,17 @@ def generate_data(n,LAMBDA=1):
 
     return train_data,train_target,test_data,test_target
 
+def error_f(x,target):
+    return np.square(np.exp(LAMBDA*x)-target)
+
 if __name__ == '__main__':
     """
     Test
     """
-    td,tt,td1,tt1 = generate_data(5,3)
+    td,tt,td1,tt1 = generate_data(5)
     print('Train_data = ',td)
     print('Train_target = ',tt)
     print('Test_data = ',td1)
     print('Test_target = ',tt1)
+
+    print(error_f(10,100))
