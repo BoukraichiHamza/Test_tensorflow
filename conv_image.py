@@ -16,7 +16,7 @@ files = glob.glob("train/*.jpg")
 # Structuration des données
 targets = []
 features = []
-for file in files[:]:
+for file in files:
     features.append(np.array(Image.open(file).resize((75,75))))
     # Label : 0 pour chat, 1 pour chien
     if  "cat" in file:
@@ -24,6 +24,7 @@ for file in files[:]:
     else:
         target = [1,0]
     targets.append(target)
+    print(file)
 
 features = np.array(features)
 targets = np.array(targets)
@@ -62,9 +63,9 @@ def create_conv(prev,filter_size,nb_filter):
 #Création des Convolutions
 conv = create_conv(x,8,32)
 conv = create_conv(conv,5,64)
-conv = create_conv(conv,5,64)
 conv = create_conv(conv,5,128)
 conv = create_conv(conv,5,256)
+conv = create_conv(conv,5,215)
 flatconv = tf.contrib.layers.flatten(conv)
 
 # First layer
@@ -95,7 +96,7 @@ correct_prediction = tf.equal(tf.argmax(softmax,axis=1),tf.argmax(y,axis=1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
 
 #Optimizer
-optimizer = tf.train.AdamOptimizer(0.001)
+optimizer = tf.train.AdamOptimizer(0.0001)
 train_op = optimizer.minimize(loss_operation)
 
 """
@@ -105,7 +106,7 @@ batch_size = 100 # taille batch d'entrainement
 sess = tf.Session() # lancement de la session tensorflow
 #Initialisation des donnees
 sess.run(tf.global_variables_initializer())
-epochs = 100 # Nombre d'epoch d'Entrainement
+epochs = 10000 # Nombre d'epoch d'Entrainement
 
 for epoch in range(0,epochs):
     #Reoordonnancement random des images
@@ -125,12 +126,12 @@ for epoch in range(0,epochs):
 
     #Calcul de la précision
     accs = []
-    for ind in range(0,len(X_valid),batch_size):
+    for ind in range(0,len(X_train),batch_size):
         #Precision sur un batch de test
-        batch = X_valid[ind:ind+batch_size]
+        batch = X_train[ind:ind+batch_size]
         acc = sess.run(accuracy, feed_dict={
         x : batch,
-        y : y_valid[ind:ind+batch_size]
+        y : y_train[ind:ind+batch_size]
         })
         accs.append(acc)
 

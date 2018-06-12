@@ -14,10 +14,10 @@ def generate_data(n):
     for i in range(1,n+1):
         j1 = np.random.randn()
         j2 = np.random.randn()
-        train_data.append([np.exp(LAMBDA*j1)])
-        test_data.append([np.exp(LAMBDA*j2)])
-        train_target.append([j1])
-        test_target.append([j2])
+        train_data.append([j1])
+        test_data.append([j2])
+        train_target.append([np.exp(LAMBDA*j1)])
+        test_target.append([np.exp(LAMBDA*j2)])
 
     return train_data,train_target,test_data,test_target
 
