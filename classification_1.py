@@ -59,7 +59,7 @@ if __name__ == '__main__':
 	w = tf.Variable(tf.random_normal([n,1]))
 	b = tf.Variable(tf.zeros([1]))
 
-	#Propagation des donnees
+	#Propagation des	 donnees
 	z = tf.matmul(py1,w)+b
 
 	#fonction d'activation du neuronne de sortie
