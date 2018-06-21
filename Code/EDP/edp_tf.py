@@ -30,29 +30,6 @@ if __name__ == '__main__':
 
     #fonction d'activation du 1er Layer
     py1 = tf.nn.sigmoid(z1)
-    
-    """
-    2ieme layer
-    """
-    w2 = tf.Variable(tf.random_normal([m,m]))
-    b2 = tf.Variable(tf.zeros([m]))
-
-	#Propagation des donnees
-    z2 = tf.matmul(py1,w2)+b2
-
-    #fonction d'activation du 1er Layer
-    py2 = tf.nn.sigmoid(z2)
-    """
-    3ieme layer
-    """
-    w3 = tf.Variable(tf.random_normal([m,m]))
-    b3 = tf.Variable(tf.zeros([m]))
-
-	#Propagation des donnees
-    z3 = tf.matmul(py2,w3)+b3
-
-    #fonction d'activation du 1er Layer
-    py3 = tf.nn.sigmoid(z3)
     """
     Neurone de sortie
     """
@@ -60,10 +37,8 @@ if __name__ == '__main__':
     b = tf.Variable(tf.zeros([1]))
 
     #Propagation des donnees
-    z = tf.matmul(py3,w)+b
-
-    #fonction d'activation du neuronne de sortie
-    py = tf.nn.sigmoid(z)
+    z = tf.matmul(py1,w)+b
+    py = z
     """
     Fonction du graphe
     """
@@ -102,7 +77,7 @@ if __name__ == '__main__':
         tf_data : test_data,
         tf_cible: test_target
         })
-              
+
         #Calcul precision
         acc = sess.run(accuracy,feed_dict={
         tf_data : train_data,
